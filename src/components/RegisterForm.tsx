@@ -11,7 +11,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="name"
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Ingresa tu nombre"
                 />
             </div>
             <div className="mb-4">
@@ -22,7 +22,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="lastname"
                     type="text"
-                    placeholder="Enter your lastname"
+                    placeholder="Ingresa tu apellido"
                 />
             </div>
             <div className="mb-4">
@@ -33,7 +33,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="email"
                     type="text"
-                    placeholder="Enter your lastname"
+                    placeholder="Ingresa tu correo electrónico"
                 />
             </div>
             <div className="mb-4">
@@ -44,7 +44,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="phone"
                     type="text"
-                    placeholder="Enter your lastname"
+                    placeholder="Ingresa tu teléfono"
                 />
             </div>
             <div className="mb-4">
@@ -55,7 +55,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="password"
                     type="text"
-                    placeholder="Enter your lastname"
+                    placeholder="Ingresa tu contraseña"
                 />
             </div>
             <div className="mb-4">
@@ -66,7 +66,7 @@ const RegisterForm: React.FC = () => {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="confirmpassword"
                     type="text"
-                    placeholder="Enter your lastname"
+                    placeholder="Ingresa tu contraseña de confirmación"
                 />
             </div>
             <div className="flex items-center justify-center">
