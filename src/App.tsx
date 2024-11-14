@@ -1,5 +1,5 @@
 import reactLogo from './assets/react.svg'
-import RegistrationForm from './components/RegisterForm'
+import AuthForms from './components/AuthForms'
 import viteLogo from '/vite.svg'
 
 function App() {
@@ -15,11 +15,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <div className='w-full max-w-md'>
-          <RegistrationForm />
-        </div>
-      </div>
+      <AuthForms />
     </>
   )
 }
