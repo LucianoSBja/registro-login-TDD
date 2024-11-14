@@ -43,6 +43,13 @@ export async function registerUser(user: User): Promise<ApiResponse> {
     };
   }
 
+  if (!isValidPhoneNumber(user.phone)) {
+    return {
+      success: false,
+      message: 'Número de teléfono no válido',
+    };
+  }
+
   // Simulate API call
   await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -80,4 +87,9 @@ export function validatePassword(password: string): boolean {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
+}
+
+export function isValidPhoneNumber(phone: string): boolean {
+  const phoneRegex = /^[0-9]{10}$/;
+  return phoneRegex.test(phone);
 }

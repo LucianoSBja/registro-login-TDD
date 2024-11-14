@@ -218,7 +218,7 @@ export default function AuthForms() {
                         </form>
                     )}
                     {message && (
-                        <div className="mt-4 text-sm text-center font-medium text-indigo-600">
+                        <div className="mt-4 text-sm text-center font-medium text-red-600">
                             {message}
                         </div>
                     )}

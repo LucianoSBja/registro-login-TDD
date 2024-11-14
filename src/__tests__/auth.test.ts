@@ -110,4 +110,20 @@ describe('User Authentication', () => {
       expect(validatePassword('StrongPassword123!')).toBe(true);
     });
   });
+
+  it('should not register a user with invalid phone number', async () => {
+    const user = {
+      firstName: 'John',
+      lastName: 'Doe',
+      phone: 'abcd1234',
+      email: 'john@example.com',
+      password: 'Password123!',
+      confirmPassword: 'Password123!',
+    };
+    const result = await registerUser(user);
+    expect(result).toEqual({
+      success: false,
+      message: 'Número de teléfono no válido',
+    });
+  });
 });
