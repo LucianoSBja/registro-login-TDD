@@ -19,6 +19,9 @@ function App() {
         <div className='w-full max-w-md'>
           <RegistrationForm />
         </div>
+        <div className='w-full max-w-md'>
+
+        </div>
       </div>
     </>
   )
