@@ -46,7 +46,7 @@ export default function AuthForms() {
                     {isLogin ? 'Inicia sesión en tu cuenta' : 'Crear una nueva cuenta'}
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
-                    Or{' '}
+                    O{' '}
                     <button
                         onClick={() => setIsLogin(!isLogin)}
                         className="font-medium text-indigo-600 hover:text-indigo-500"
