@@ -1,21 +1,4 @@
-interface User {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-interface ApiResponse {
-  success: boolean;
-  message: string;
-}
+import { ApiResponse, LoginCredentials, User } from '../types';
 
 // Simulated database
 const users: User[] = [];

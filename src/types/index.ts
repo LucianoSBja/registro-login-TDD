@@ -17,7 +17,21 @@ export interface FormErrors {
   submit?: string;
 }
 
+export interface User {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
 export interface ApiResponse {
   success: boolean;
-  message?: string;
+  message: string;
 }
