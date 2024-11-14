@@ -1,6 +1,6 @@
 # Test Driven Development para el registro de usuarios e inicio de sesión
 
-Este proyecto es parte de un hackathon en el que se implementa Test Driven Development (TDD) para construir una aplicación de registro e inicio de sesión de usuario, utilizando JavaScript/TypeScript y Jest para las pruebas unitarias. El objetivo principal es garantizar que la funcionalidad esté completamente cubierta por tests antes de escribir el código de implementación.
+Este proyecto es parte de un hackathon en el que se implementa Test Driven Development (TDD) para construir una aplicación de registro e inicio de sesión de usuario, utilizando JavaScript/TypeScript y Vitest para las pruebas unitarias. El objetivo principal es garantizar que la funcionalidad esté completamente cubierta por tests antes de escribir el código de implementación.
 
 ## Características
 - Registro de usuario con los siguientes campos:
@@ -46,7 +46,7 @@ yarn test
 ## Scripts Disponibles
 
 - npm start: Inicia la aplicación en modo de desarrollo.
-- npm test: Ejecuta las pruebas unitarias con Jest.
+- npm test: Ejecuta las pruebas unitarias con Vitest.
 
 ## Estructura del Proyecto
 
@@ -56,11 +56,10 @@ yarn test
 │   │   ├── RegisterForm.jsx       # Componente del formulario de registro
 │   │   └── LoginForm.jsx          # Componente del formulario de inicio de sesión
 │   └── api
-│       └── mockApi.js             # Mock de API para simular el backend
-├── tests
+│   │      └── mockApi.js          # Mock de API para simular el backend
+├── tests                           
 │   ├── RegisterForm.test.js       # Tests para el formulario de registro
 │   └── LoginForm.test.js          # Tests para el formulario de inicio de sesión
-├── jest.config.js                 # Configuración de Jest
 └── README.md                      # Documentación del proyecto
 ```
 
@@ -78,7 +77,7 @@ Ejemplo:
 ## Tecnologías Utilizadas
 - React: Para el desarrollo de los formularios de registro e inicio de sesión.
 - Tailwind CSS: Para el diseño responsivo (opcional).
-- Jest: Para la creación de pruebas unitarias.
+- Vitest: Para la creación de pruebas unitarias.
 - React Testing Library: Para facilitar la prueba de componentes React.
 - JavaScript o TypeScript: Según lo decidas para implementar la lógica del proyecto.
 
