@@ -1,5 +1,4 @@
-// LoginForm.tsx
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 interface LoginFormProps {
     onSubmit: (credentials: { email: string; password: string }) => Promise<void>
@@ -11,17 +10,12 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
     const [status, setStatus] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        // Reset errors and status
-        setErrors({})
-        setStatus(null)
-
-        // Validación
         const newErrors: { email?: string; password?: string } = {}
-        if (!email) newErrors.email = 'Email is required'
-        if (!password) newErrors.password = 'Password is required'
+        if (!email) newErrors.email = 'Se requiere correo electrónico'
+        if (!password) newErrors.password = 'Se requiere contraseña'
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors)
@@ -43,7 +37,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
                 <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email:
+                    Correo electrónico:
                 </label>
                 <input
                     id="email"
@@ -57,7 +51,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
             <div className="flex flex-col">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                    Password:
+                    Contraseña:
                 </label>
                 <input
                     id="password"
@@ -79,7 +73,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
                 type="submit"
                 className="w-full px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-                Login
+                Inicie sesión
             </button>
         </form>
     )

@@ -22,6 +22,6 @@ export const loginApi = async (
       } else {
         resolve({ success: false, message: 'Invalid credentials' });
       }
-    }, 500); // 500ms de delay para simular una llamada real
+    }, 500);
   });
 };

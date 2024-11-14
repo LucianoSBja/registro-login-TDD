@@ -1,99 +1,84 @@
 import { describe, it, expect, vi } from 'vitest'
-import { fireEvent, render, screen, act } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { LoginForm } from '../components/LoginForm'
 import { loginApi } from '../api'
 
-
 describe('LoginForm', () => {
-    // 1. Test de renderizado
     it('should render login form with email and password fields', () => {
         render(<LoginForm onSubmit={() => Promise.resolve()} />)
 
-        expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
+        expect(screen.getByLabelText(/Correo electrónico/i)).toBeInTheDocument()
+        expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /Inicie sesión/i })).toBeInTheDocument()
     })
 
-    // 2. Test de validación de campos vacíos
     it('should show error messages when submitting empty fields', async () => {
+        const user = userEvent.setup()
         render(<LoginForm onSubmit={() => Promise.resolve()} />)
 
-        const submitButton = screen.getByRole('button', { name: /login/i })
+        const submitButton = screen.getByRole('button', { name: /Inicie sesión/i })
+        await user.click(submitButton)
 
-        await act(async () => {
-            fireEvent.click(submitButton)
-        })
-
-        expect(screen.getByText(/email is required/i)).toBeInTheDocument()
-        expect(screen.getByText(/password is required/i)).toBeInTheDocument()
+        expect(await screen.findByText(/Se requiere correo electrónico/i)).toBeInTheDocument()
+        expect(await screen.findByText(/Se requiere contraseña/i)).toBeInTheDocument()
     })
 
-    // 3. Test de envío de credenciales
     it('should call onSubmit with form data when submitting valid credentials', async () => {
-        const mockOnSubmit = vi.fn()
+        const user = userEvent.setup()
+        const mockOnSubmit = vi.fn(() => Promise.resolve())
         render(<LoginForm onSubmit={mockOnSubmit} />)
 
-        const emailInput = screen.getByLabelText(/email/i)
-        const passwordInput = screen.getByLabelText(/password/i)
+        const emailInput = screen.getByLabelText(/Correo electrónico/i)
+        const passwordInput = screen.getByLabelText(/Contraseña/i)
 
-        await act(async () => {
-            fireEvent.change(emailInput, { target: { value: 'test@test.com' } })
-            fireEvent.change(passwordInput, { target: { value: 'password123' } })
-        })
+        await user.type(emailInput, 'test@test.com')
+        await user.type(passwordInput, 'password123')
+        await user.click(screen.getByRole('button', { name: /Inicie sesión/i }))
 
-        await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: /login/i }))
-        })
-        expect(mockOnSubmit).toHaveBeenCalledWith({
-            email: 'test@test.com',
-            password: 'password123'
+        await vi.waitFor(() => {
+            expect(mockOnSubmit).toHaveBeenCalledWith({
+                email: 'test@test.com',
+                password: 'password123'
+            })
         })
     })
 
-    // 4. Test de integración con API mock
     it('should show success message with valid credentials', async () => {
-        render(<LoginForm onSubmit={async (credentials) => {
+        const user = userEvent.setup()
+        const handleSubmit = async (credentials: any) => {
             const response = await loginApi(credentials)
             if (!response.success) throw new Error(response.message)
-        }} />)
+        }
 
-        const emailInput = screen.getByLabelText(/email/i)
-        const passwordInput = screen.getByLabelText(/password/i)
+        render(<LoginForm onSubmit={handleSubmit} />)
 
-        await act(async () => {
-            fireEvent.change(emailInput, { target: { value: 'test@test.com' } })
-            fireEvent.change(passwordInput, { target: { value: 'password123' } })
-        })
+        const emailInput = screen.getByLabelText(/Correo electrónico/i)
+        const passwordInput = screen.getByLabelText(/Contraseña/i)
 
-        await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: /login/i }))
-        })
+        await user.type(emailInput, 'test@test.com')
+        await user.type(passwordInput, 'password123')
+        await user.click(screen.getByRole('button', { name: /Inicie sesión/i }))
 
-        await vi.waitFor(() => {
-            expect(screen.getByText(/login successful/i)).toBeInTheDocument()
-        })
+        expect(await screen.findByText(/login successful/i)).toBeInTheDocument()
     })
 
     it('should show error message with invalid credentials', async () => {
-        render(<LoginForm onSubmit={async (credentials) => {
+        const user = userEvent.setup()
+        const handleSubmit = async (credentials: any) => {
             const response = await loginApi(credentials)
             if (!response.success) throw new Error(response.message)
-        }} />)
+        }
 
-        const emailInput = screen.getByLabelText(/email/i)
-        const passwordInput = screen.getByLabelText(/password/i)
+        render(<LoginForm onSubmit={handleSubmit} />)
 
-        await act(async () => {
-            fireEvent.change(emailInput, { target: { value: 'wrong@test.com' } })
-            fireEvent.change(passwordInput, { target: { value: 'wrongpass' } })
-        })
+        const emailInput = screen.getByLabelText(/Correo electrónico/i)
+        const passwordInput = screen.getByLabelText(/Contraseña/i)
 
-        await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: /login/i }))
-        })
+        await user.type(emailInput, 'wrong@test.com')
+        await user.type(passwordInput, 'wrongpass')
+        await user.click(screen.getByRole('button', { name: /Inicie sesión/i }))
 
-        await vi.waitFor(() => {
-            expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
-        })
+        expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument()
     })
 })

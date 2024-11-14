@@ -1,4 +1,5 @@
 import reactLogo from './assets/react.svg'
+import { LoginForm } from './components/LoginForm'
 import RegistrationForm from './components/RegisterForm'
 import viteLogo from '/vite.svg'
 
@@ -20,7 +21,7 @@ function App() {
           <RegistrationForm />
         </div>
         <div className='w-full max-w-md'>
-
+          <LoginForm onSubmit={() => Promise.resolve()} />
         </div>
       </div>
     </>
