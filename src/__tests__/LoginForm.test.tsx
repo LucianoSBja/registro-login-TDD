@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { fireEvent, render, screen, act } from '@testing-library/react'
 import { LoginForm } from '../components/LoginForm'
 import { loginApi } from '../api'
 
@@ -20,7 +19,10 @@ describe('LoginForm', () => {
         render(<LoginForm onSubmit={() => Promise.resolve()} />)
 
         const submitButton = screen.getByRole('button', { name: /login/i })
-        await userEvent.click(submitButton)
+
+        await act(async () => {
+            fireEvent.click(submitButton)
+        })
 
         expect(screen.getByText(/email is required/i)).toBeInTheDocument()
         expect(screen.getByText(/password is required/i)).toBeInTheDocument()
@@ -31,12 +33,17 @@ describe('LoginForm', () => {
         const mockOnSubmit = vi.fn()
         render(<LoginForm onSubmit={mockOnSubmit} />)
 
-        await userEvent.type(screen.getByLabelText(/email/i), 'test@test.com')
-        await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+        const emailInput = screen.getByLabelText(/email/i)
+        const passwordInput = screen.getByLabelText(/password/i)
 
-        const submitButton = screen.getByRole('button', { name: /login/i })
-        await userEvent.click(submitButton)
+        await act(async () => {
+            fireEvent.change(emailInput, { target: { value: 'test@test.com' } })
+            fireEvent.change(passwordInput, { target: { value: 'password123' } })
+        })
 
+        await act(async () => {
+            fireEvent.click(screen.getByRole('button', { name: /login/i }))
+        })
         expect(mockOnSubmit).toHaveBeenCalledWith({
             email: 'test@test.com',
             password: 'password123'
@@ -45,41 +52,47 @@ describe('LoginForm', () => {
 
     // 4. Test de integración con API mock
     it('should show success message with valid credentials', async () => {
-        render(<LoginForm onSubmit={async () => {
-            const response = await loginApi({
-                email: 'test@test.com',
-                password: 'password123'
-            })
+        render(<LoginForm onSubmit={async (credentials) => {
+            const response = await loginApi(credentials)
             if (!response.success) throw new Error(response.message)
         }} />)
 
-        await userEvent.type(screen.getByLabelText(/email/i), 'test@test.com')
-        await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+        const emailInput = screen.getByLabelText(/email/i)
+        const passwordInput = screen.getByLabelText(/password/i)
 
-        const submitButton = screen.getByRole('button', { name: /login/i })
-        await userEvent.click(submitButton)
+        await act(async () => {
+            fireEvent.change(emailInput, { target: { value: 'test@test.com' } })
+            fireEvent.change(passwordInput, { target: { value: 'password123' } })
+        })
 
-        await waitFor(() => {
+        await act(async () => {
+            fireEvent.click(screen.getByRole('button', { name: /login/i }))
+        })
+
+        await vi.waitFor(() => {
             expect(screen.getByText(/login successful/i)).toBeInTheDocument()
         })
     })
 
     it('should show error message with invalid credentials', async () => {
-        render(<LoginForm onSubmit={async () => {
-            const response = await loginApi({
-                email: 'wrong@test.com',
-                password: 'wrongpass'
-            })
+        render(<LoginForm onSubmit={async (credentials) => {
+            const response = await loginApi(credentials)
             if (!response.success) throw new Error(response.message)
         }} />)
 
-        await userEvent.type(screen.getByLabelText(/email/i), 'wrong@test.com')
-        await userEvent.type(screen.getByLabelText(/password/i), 'wrongpass')
+        const emailInput = screen.getByLabelText(/email/i)
+        const passwordInput = screen.getByLabelText(/password/i)
 
-        const submitButton = screen.getByRole('button', { name: /login/i })
-        await userEvent.click(submitButton)
+        await act(async () => {
+            fireEvent.change(emailInput, { target: { value: 'wrong@test.com' } })
+            fireEvent.change(passwordInput, { target: { value: 'wrongpass' } })
+        })
 
-        await waitFor(() => {
+        await act(async () => {
+            fireEvent.click(screen.getByRole('button', { name: /login/i }))
+        })
+
+        await vi.waitFor(() => {
             expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
         })
     })
