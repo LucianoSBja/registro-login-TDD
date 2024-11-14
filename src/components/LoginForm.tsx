@@ -9,29 +9,42 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
     const [status, setStatus] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const newErrors: { email?: string; password?: string } = {}
-        if (!email) newErrors.email = 'Se requiere correo electrónico'
-        if (!password) newErrors.password = 'Se requiere contraseña'
+        setErrors({});
+        setStatus(null);
+
+        const newErrors: { email?: string; password?: string } = {};
+        if (!email) newErrors.email = 'Se requiere correo electrónico';
+        if (!password) newErrors.password = 'Se requiere contraseña';
 
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
-            return
+            setErrors(newErrors);
+            return;
         }
 
+        setIsLoading(true);
         try {
-            await onSubmit({ email, password })
-            setStatus({ message: 'Login successful', type: 'success' })
+            const response = await onSubmit({ email, password });
+
+            if (response.success) {
+                setStatus({ message: 'Inicio de sesión exitoso', type: 'success' });
+            } else {
+                setStatus({ message: response.message, type: 'error' });
+            }
         } catch (error) {
             setStatus({
-                message: error instanceof Error ? error.message : 'An error occurred',
-                type: 'error'
-            })
+                message: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
+                type: 'error',
+            });
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
+
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -63,17 +76,29 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
                 {errors.password && <span className="text-red-600 text-sm">{errors.password}</span>}
             </div>
 
+            {isLoading && (
+                <div data-testid="loading-indicator" className="p-4 text-sm text-blue-600">
+                    Cargando...
+                </div>
+            )}
+
             {status && (
-                <div className={`p-4 mt-4 text-sm rounded-md ${status.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                <div
+                    data-testid="message"
+                    className={`p-4 mt-4 text-sm rounded-md ${status.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'
+                        }`}
+                >
                     {status.message}
                 </div>
             )}
 
             <button
                 type="submit"
-                className="w-full px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                disabled={isLoading}
+                className={`w-full px-4 py-2 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isLoading ? 'bg-indigo-300' : 'bg-indigo-600 hover:bg-indigo-700'
+                    }`}
             >
-                Inicie sesión
+                {isLoading ? 'Enviando...' : 'Inicie sesión'}
             </button>
         </form>
     )
